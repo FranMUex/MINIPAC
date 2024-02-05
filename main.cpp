@@ -3,6 +3,8 @@
 
 using namespace std;
 
+void mostrarLab(char lab[][10]);
+
 int main(int argc, char **argv)
 {
     char laberinto[10][10];
@@ -26,20 +28,26 @@ int main(int argc, char **argv)
             }
         }
         
-
         x = 0;
         y++;
     }
-    
+    labArch.close();
+
+    mostrarLab(laberinto);    
+
+    return 0;
+
+}
+
+
+void mostrarLab(char lab[][10])
+{
     for(int i = 0; i < 10; i++)
     {
         for(int j = 0; j < 10; j++)
         {
-            cout<<laberinto[i][j];
+            cout<<lab[i][j];
         }
         cout<<endl;
     }
-
-    return 0;
-
 }
