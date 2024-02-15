@@ -9,12 +9,11 @@ int main(int argc, char **argv)
 {
     char laberinto[10][10];
     string currChar;
-    ifstream labArch;
+    ifstream labArch(argv[1]);
     int x = 0, y = 0;   
 
     cout<<argv[1]<<endl;
 
-    labArch.open(argv[1]);
     while(!labArch.eof())
     {   
         getline(labArch, currChar, '\n');
