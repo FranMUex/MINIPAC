@@ -1,5 +1,7 @@
 #include<iostream>
 #include<fstream>
+#include "pacman.h"
+#include "fantasma.h"
 
 using namespace std;
 
@@ -8,12 +10,16 @@ void mostrarLab(char lab[][10]);
 int main(int argc, char **argv)
 {
     char laberinto[10][10];
+
     string currChar;
-    ifstream labArch(argv[1]);
-    int x = 0, y = 0;   
+    ifstream labArch("MINIPAC1.txt");
 
-    cout<<argv[1]<<endl;
+    int x = 0, y = 0,
+    salidaX, salidaY;
 
+    Pacman *pacman;
+    Fantasma *fantasma;
+    
     while(!labArch.eof())
     {   
         getline(labArch, currChar, '\n');
@@ -22,6 +28,22 @@ int main(int argc, char **argv)
         {
             for(int i = 0; i < currChar.length(); i += 2)
             {
+                switch(currChar[i])
+                {
+                    case 'C':
+                        pacman = new Pacman(x, y);
+                        break;
+                    
+                    case 'F':
+                        fantasma = new Fantasma(x, y);
+                        break;
+
+                    case 'S':
+                        salidaX = x;
+                        salidaY = y;
+                        break;
+
+                }
                 laberinto[y][x] = currChar[i];
                 x++;
             }
@@ -30,6 +52,7 @@ int main(int argc, char **argv)
         x = 0;
         y++;
     }
+
     labArch.close();
 
     mostrarLab(laberinto);    
