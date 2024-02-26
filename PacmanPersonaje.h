@@ -27,6 +27,8 @@ public:
 	int getY();
 	void setY(int y) ;
 
+	double getValor(int salidaX, int salidaY, int fantX, int fantY);
+
 	 ~PacmanPersonaje();
 };
 

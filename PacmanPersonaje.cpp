@@ -22,7 +22,7 @@ float PacmanPersonaje::getDistancia(int destinoX, int destinoY)
     int catetoX = destinoX - x;
     int catetoY = destinoY - y;
 
-    return sqrt(catetoX^2 + catetoY^2);
+    return sqrt(pow(catetoX, 2) + pow(catetoY, 2));
 }
 int PacmanPersonaje::getX() {
 	return x;
@@ -61,6 +61,11 @@ void PacmanPersonaje::mover(int m) {
 }
 
 void PacmanPersonaje::distancia() {
+}
+
+double PacmanPersonaje::getValor(int salidaX, int salidaY, int fantX, int fantY)
+{
+	return((100 - getDistancia(salidaX, salidaY)) * (getDistancia(fantX, fantY) / 12.727));
 }
 
 PacmanPersonaje::~PacmanPersonaje() {
