@@ -125,7 +125,7 @@ void PacmanPersonaje::EscaladaSimple(char lab[10][10], int salidaX, int salidaY,
 		}
 		aux->mover(mov);
 	}
-	if(mov>7){
+	if(mov>4){
 		cout<<"No se ha encontrado solucion"<<endl;
 	}
 	else{
