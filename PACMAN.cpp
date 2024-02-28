@@ -16,7 +16,6 @@ using namespace std;
 using namespace std;
 
 
-
 void mostrarLab(char lab[][10]);
 
 int main() {
@@ -70,8 +69,9 @@ int main() {
 	fEnt.close();
 
 	mostrarLab(laberinto);
-	for(int i=0;i<10;i++){
-	  fantasma->mover(laberinto);
+	for(int i=0;i<28;i++){
+	  //fantasma->mover(laberinto);
+		pacman->EscaladaSimple(laberinto, salidaX, salidaY, fantasma->getX(), fantasma->getY());
 	}
 	return 0;
 }
