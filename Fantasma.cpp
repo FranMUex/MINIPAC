@@ -25,7 +25,7 @@ float Fantasma::getDistancia(int destinoX, int destinoY)
     int catetoX = destinoX - x;
     int catetoY = destinoY - y;
 
-    return sqrt(pow(catetoX, 2) + pow(catetoY, 2));
+    return sqrt(pow(catetoX, 2) - pow(catetoY, 2));
 }
 /*void Fantasma::mover(char lab[10][10]) {
 

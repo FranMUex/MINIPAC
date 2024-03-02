@@ -21,7 +21,7 @@ public:
 	PacmanPersonaje();
 	PacmanPersonaje (int x, int y);
 
-	float getDistancia(int destinoX, int destinoY);
+	double getDistancia(int destinoX, int destinoY);
 
 	void mover(int m);
 	void distancia();
@@ -35,7 +35,7 @@ public:
 	void EscaladaMaxPendiente(char lab[10][10], int salidaX, int salidaY, int fantX, int fantY);
 	bool getPared(int x,int y,char lab[10][10]);
 
-	double getValor(int salidaX, int salidaY, int fantX, int fantY);
+	double getValor(int salidaX, int salidaY, int fantX, int fantY, char lab[10][10]);
 
 	 ~PacmanPersonaje();
 };

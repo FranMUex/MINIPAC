@@ -13,7 +13,7 @@
 
 using namespace std;
 
-void mostrarLab(char lab[][10]);
+void mostrarLab(char lab[10][10]);
 
 int main() {
 	char laberinto[10][10];
@@ -86,10 +86,10 @@ int main() {
 }
 
 
-void mostrarLab(char lab[][10]) {
+void mostrarLab(char lab[10][10]) {
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
-			cout << lab[i][j];
+			cout << lab[i][j] << " ";
 		}
 		cout << endl;
 	}

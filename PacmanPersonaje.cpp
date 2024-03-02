@@ -17,7 +17,7 @@ PacmanPersonaje::PacmanPersonaje(int x, int y)
     this->y = y;
 }
 
-float PacmanPersonaje::getDistancia(int destinoX, int destinoY)
+double PacmanPersonaje::getDistancia(int destinoX, int destinoY)
 {
     int catetoX = destinoX - x;
     int catetoY = destinoY - y;
@@ -66,14 +66,14 @@ void PacmanPersonaje::distancia() {
 }
 
 void PacmanPersonaje::EscaladaSimple2(char lab[10][10], int salidaX, int salidaY, int fantX, int fantY) { //comprobar que no nos come el fantasma
-	float m=getValor(salidaX, salidaY, fantX, fantY);
+	float m=getValor(salidaX, salidaY, fantX, fantY, lab);
 	int filaActual=y;
 	int columnaActual=x;
 	int nuevaFila;
 	int nuevaColumna;
 	int numMov =1;
 	bool fin=false;
-	while(getValor(salidaX, salidaY, fantX, fantY)>m||numMov<5||!fin ){
+	while(getValor(salidaX, salidaY, fantX, fantY, lab)>m||numMov<5||!fin ){
 		if(numMov==1){ //der
 			nuevaFila = filaActual;
 			nuevaColumna =columnaActual+1;
@@ -91,7 +91,7 @@ void PacmanPersonaje::EscaladaSimple2(char lab[10][10], int salidaX, int salidaY
 			nuevaFila =filaActual+1;
 		}
 		if(lab[nuevaFila][nuevaColumna] != 'M'&& lab[nuevaFila][nuevaColumna] != 'F'){
-			if(getValor(salidaX, salidaY, fantX, fantY)<m){
+			if(getValor(salidaX, salidaY, fantX, fantY, lab)<m){
 				setX(columnaActual);
 				setY(filaActual);
 				fin=true;
@@ -109,13 +109,13 @@ void PacmanPersonaje::EscaladaSimple2(char lab[10][10], int salidaX, int salidaY
 	cout<<"mov:"<<numMov<<"  Fila:"<<y<<"  Col:"<<x<<endl;
 }
 void PacmanPersonaje::EscaladaSimple(char lab[10][10], int salidaX, int salidaY, int fantX, int fantY) { //comprobar que no nos come el fantasma
-	double m=getValor(salidaX, salidaY, fantX, fantY);
+	double m=getValor(salidaX, salidaY, fantX, fantY, lab);
 	cout<<m<<endl;
 	PacmanPersonaje* aux = new PacmanPersonaje(getX(),getY());
 	int mov =1;
 	aux->mover(mov);
 	bool pared = aux->getPared(aux->getX(),aux->getY(),lab);
-	while((aux->getValor(salidaX, salidaY, fantX, fantY)>m)||mov<5){ //valor
+	while((aux->getValor(salidaX, salidaY, fantX, fantY, lab)>m)||mov<5){ //valor
 		mov ++;
 		pared= aux->getPared(aux->getX(),aux->getY(),lab);
 		aux->setX(getX());
@@ -137,16 +137,16 @@ void PacmanPersonaje::EscaladaSimple(char lab[10][10], int salidaX, int salidaY,
 
 void PacmanPersonaje::EscaladaMaxPendiente(char lab[10][10], int salidaX, int salidaY, int fantX, int fantY)
 {
-	double hPr = getValor(salidaX, salidaY, fantX, fantY), hPrAux;
+	double hPr = getValor(salidaX, salidaY, fantX, fantY, lab), hPrAux = 0;
 
 	bool pared;
 
-	int movMejor;
+	int movMejor = 0;
 
 	Fantasma *auxFant = new Fantasma(fantX, fantY);
 	auxFant->mover(lab);
 
-	for(int i = 1; i <= 4; i++)
+	for(int i = 1; i < 5; i++)
 	{	
 		PacmanPersonaje *auxPac = new PacmanPersonaje(getX(), getY());
 
@@ -169,9 +169,9 @@ void PacmanPersonaje::EscaladaMaxPendiente(char lab[10][10], int salidaX, int sa
 		if(!pared){
 			auxPac->mover(i);
 
-			hPrAux = auxPac->getValor(salidaX, salidaY, auxFant->getX(), auxFant->getY());
+			hPrAux = auxPac->getValor(salidaX, salidaY, auxFant->getX(), auxFant->getY(), lab);
 
-			if(hPr < hPrAux)
+			if(hPrAux > hPr && hPrAux != 0)
 			{
 				movMejor = i;
 				hPr = hPrAux;
@@ -185,16 +185,30 @@ void PacmanPersonaje::EscaladaMaxPendiente(char lab[10][10], int salidaX, int sa
 	mover(movMejor);
 }
 
-double PacmanPersonaje::getValor(int salidaX, int salidaY, int fantX, int fantY) {
+double PacmanPersonaje::getValor(int salidaX, int salidaY, int fantX, int fantY, char lab[10][10]) {
 	double 
 	distSalida = getDistancia(salidaX, salidaY),
 	distFantasma = getDistancia(fantX, fantY);
 
-	return (100 - distSalida) * (distFantasma / 12.727);
+	short numMuros = 0;
+
+	for(int i = getY() - 1; i < getY() + 1; i++)
+	{
+		for(int j = getX() - 1; j < getX() + 1; j++)
+		{
+			if(getPared(j, i, lab))
+			{
+				numMuros++;
+			}
+		}
+	}
+
+	return distFantasma/(distSalida*2+numMuros);
 }
 
-bool PacmanPersonaje:: getPared(int x,int y,char lab[10][10]){
-	return lab[x][y] == 'M';
+bool PacmanPersonaje:: getPared(int x,int y,char lab[10][10])
+{
+	return lab[y][x] == 'M';
 }
 
 PacmanPersonaje::~PacmanPersonaje() {
