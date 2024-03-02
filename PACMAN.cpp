@@ -8,21 +8,16 @@
 
 #include<iostream>
 #include<fstream>
-using namespace std;
-
 #include "PacmanPersonaje.h"
 #include "Fantasma.h"
 
 using namespace std;
 
-
 void mostrarLab(char lab[][10]);
 
 int main() {
 	char laberinto[10][10];
-	string currChar;
 	ifstream fEnt;
-	ofstream fSal;
 	int numChar = 200;
 	PacmanPersonaje *pacman;
 	Fantasma *fantasma;
@@ -44,7 +39,7 @@ int main() {
 
 			switch(caracter)
 			{
-			case 'C':
+			case 'P':
 				pacman = new PacmanPersonaje(columna, fila); //fila y columna pueden estar al reves
 				break;
 
@@ -68,13 +63,29 @@ int main() {
 	}
 	fEnt.close();
 
-	mostrarLab(laberinto);
-	for(int i=0;i<28;i++){
-	  //fantasma->mover(laberinto);
-		pacman->EscaladaSimple(laberinto, salidaX, salidaY, fantasma->getX(), fantasma->getY());
+	bool fin = false;
+
+	while(!fin)
+	{
+		mostrarLab(laberinto);
+	  	fantasma->mover(laberinto);
+		pacman->EscaladaMaxPendiente(laberinto, salidaX, salidaY, fantasma->getX(), fantasma->getY());
+		if(pacman->getX() == salidaX && pacman->getY() == salidaY)
+		{
+			cout<<"Victoria"<<endl;
+			fin = true;
+		}
+		else if(pacman->getX() == fantasma->getX() && pacman->getY() == fantasma->getY())
+		{
+			cout<<"Derrota"<<endl;
+			fin = true;
+		}
 	}
+	
 	return 0;
 }
+
+
 void mostrarLab(char lab[][10]) {
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {

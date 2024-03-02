@@ -11,6 +11,7 @@ Fantasma::Fantasma(int x, int y)
 {
     this->x = x;
     this->y = y;
+	this->numMov = 1;
 }
 Fantasma::Fantasma(int x, int y,int mov)
 {
@@ -74,7 +75,7 @@ void Fantasma::mover(char lab[10][10]) {
     	}
     	if(numMov==4){ //arriba
     		nuevaColumna = columnaActual;
-    		 nuevaFila =filaActual+1;
+    		 nuevaFila =filaActual-1;
     	}
         if(lab[nuevaFila][nuevaColumna] == 'M'||lab[nuevaFila][nuevaColumna] == 'S'){
         	numMov=numMov+1;

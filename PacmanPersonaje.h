@@ -10,6 +10,7 @@
 #include<cmath>
 #include <iostream>
 #include <string>
+#include "Fantasma.h"
 using namespace std;
 
 class PacmanPersonaje {
