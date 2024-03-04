@@ -24,7 +24,7 @@ int main() {
 	int salidaX;
 	int salidaY;
 
-	fEnt.open("MINIPAC1.txt");
+	fEnt.open("MINIPAC6.txt");
 	if (fEnt.fail()) {
 		cerr << "ERROR" << endl;
 	}
@@ -64,20 +64,21 @@ int main() {
 	fEnt.close();
 
 	bool fin = false;
+	mostrarLab(laberinto);
 
 	while(!fin)
 	{
-		mostrarLab(laberinto);
 	  	fantasma->mover(laberinto);
-		pacman->EscaladaMaxPendiente(laberinto, salidaX, salidaY, fantasma->getX(), fantasma->getY());
-		if(pacman->getX() == salidaX && pacman->getY() == salidaY)
-		{
-			cout<<"Victoria"<<endl;
-			fin = true;
-		}
-		else if(pacman->getX() == fantasma->getX() && pacman->getY() == fantasma->getY())
+		
+		if(!pacman->EscaladaSimple(laberinto, salidaX, salidaY, fantasma->getX(), fantasma->getY()) || 
+		pacman->getX() == fantasma->getX() && pacman->getY() == fantasma->getY())
 		{
 			cout<<"Derrota"<<endl;
+			fin = true;
+		}
+		else if(pacman->getX() == salidaX && pacman->getY() == salidaY)
+		{
+			cout<<"Victoria"<<endl;
 			fin = true;
 		}
 	}

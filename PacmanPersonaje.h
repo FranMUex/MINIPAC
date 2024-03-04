@@ -30,9 +30,8 @@ public:
 	void setX(int x);
 	int getY();
 	void setY(int y) ;
-	void EscaladaSimple(char lab[10][10], int salidaX, int salidaY, int fantX, int fantY);
-	void EscaladaSimple2(char lab[10][10], int salidaX, int salidaY, int fantX, int fantY);
-	void EscaladaMaxPendiente(char lab[10][10], int salidaX, int salidaY, int fantX, int fantY);
+	bool EscaladaSimple(char lab[10][10], int salidaX, int salidaY, int fantX, int fantY);
+	bool EscaladaMaxPendiente(char lab[10][10], int salidaX, int salidaY, int fantX, int fantY);
 	bool getPared(int x,int y,char lab[10][10]);
 
 	double getValor(int salidaX, int salidaY, int fantX, int fantY, char lab[10][10]);
