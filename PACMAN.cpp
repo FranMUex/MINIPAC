@@ -24,7 +24,7 @@ int main() {
 	int salidaX;
 	int salidaY;
 
-	fEnt.open("MINIPAC6.txt");
+	fEnt.open("MINIPAC2.txt");
 	if (fEnt.fail()) {
 		cerr << "ERROR" << endl;
 	}
@@ -70,7 +70,7 @@ int main() {
 	{
 	  	fantasma->mover(laberinto);
 		
-		if(!pacman->EscaladaSimple(laberinto, salidaX, salidaY, fantasma->getX(), fantasma->getY()) || 
+		if(!pacman->EscaladaSimpleAlternativo(laberinto, salidaX, salidaY, *fantasma) || 
 		pacman->getX() == fantasma->getX() && pacman->getY() == fantasma->getY())
 		{
 			cout<<"Derrota"<<endl;
@@ -82,6 +82,8 @@ int main() {
 			fin = true;
 		}
 	}
+
+	delete pacman; delete fantasma;
 	
 	return 0;
 }

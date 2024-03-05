@@ -10,6 +10,7 @@
 #include<cmath>
 #include <iostream>
 #include <string>
+#include <time.h>
 #include "Fantasma.h"
 using namespace std;
 
@@ -30,8 +31,9 @@ public:
 	void setX(int x);
 	int getY();
 	void setY(int y) ;
-	bool EscaladaSimple(char lab[10][10], int salidaX, int salidaY, int fantX, int fantY);
-	bool EscaladaMaxPendiente(char lab[10][10], int salidaX, int salidaY, int fantX, int fantY);
+	bool EscaladaSimple(char lab[10][10], int salidaX, int salidaY, Fantasma fantasma);
+	bool EscaladaSimpleAlternativo(char lab[10][10], int salidaX, int salidaY, Fantasma fantasma);
+	bool EscaladaMaxPendiente(char lab[10][10], int salidaX, int salidaY, Fantasma fantasma);
 	bool getPared(int x,int y,char lab[10][10]);
 
 	double getValor(int salidaX, int salidaY, int fantX, int fantY, char lab[10][10]);

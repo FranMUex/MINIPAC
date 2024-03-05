@@ -65,61 +65,105 @@ void PacmanPersonaje::distancia() {
 
 }
 
-bool PacmanPersonaje::EscaladaSimple(char lab[10][10], int salidaX, int salidaY, int fantX, int fantY) { //comprobar que no nos come el fantasma
-	double m=getValor(salidaX, salidaY, fantX, fantY, lab);
+bool PacmanPersonaje::EscaladaSimpleAlternativo(char lab[10][10], int salidaX, int salidaY, Fantasma fantasma)
+{
+	double hPr = getValor(salidaX, salidaY, fantasma.getX(), fantasma.getY(), lab), hPrAct;
+	srand(time(NULL));
+
+	bool mejor = false, 
+		 pared = false;
+
+	int mov;
+
+	fantasma.mover(lab);
+	for(int i = 0; i < 200 && !mejor; i++)
+	{
+		PacmanPersonaje *auxPac = new PacmanPersonaje(getX(), getY());
+		mov = 1+ rand() %4;
+		switch(mov)
+		{
+			case 1:
+				pared = getPared(getX() - 1, getY(), lab);
+				break;
+			case 2:
+				pared = getPared(getX() + 1, getY(), lab);
+				break;
+			case 3:
+				pared = getPared(getX(), getY() + 1, lab);
+				break;
+			case 4:
+				pared = getPared(getX(), getY() - 1, lab);
+				break;
+		}
+		if(!pared)
+		{
+			auxPac->mover(mov);
+			hPrAct = auxPac->getValor(salidaX, salidaY, fantasma.getX(), fantasma.getY(), lab);
+
+			if(hPrAct < hPr)
+			{
+				mover(mov);
+				mejor = true;
+			}
+		}
+		delete auxPac;
+	}
+
+	return mejor;
+}
+
+bool PacmanPersonaje::EscaladaSimple(char lab[10][10], int salidaX, int salidaY, Fantasma fantasma) { //comprobar que no nos come el fantasma
+	double m=getValor(salidaX, salidaY, fantasma.getX(), fantasma.getY(), lab);
 	cout<<m<<endl;
 	PacmanPersonaje* aux = new PacmanPersonaje(getX(),getY());
 	int mov =1;
 	bool pared = aux->getPared(aux->getX(),aux->getY(),lab), fin = true;
-	Fantasma *fantAux = new Fantasma(fantX, fantY);
-	fantAux->mover(lab);
+	fantasma.mover(lab);
 
 
-	if(aux->getValor(salidaX, salidaY, fantAux->getX(), fantAux->getY(), lab)>m){
-	do
-	{
-		aux->mover(mov);
-		cout<<"Movimiento: "<<mov<<" | "<<aux->getValor(salidaX, salidaY, fantX, fantY, lab)<<endl;
-		mov ++;
-		pared= aux->getPared(aux->getX(),aux->getY(),lab);
-		aux->setX(getX());
-		aux->setY(getY());
-		if (pared==true){
-			mov++;
+	if(aux->getValor(salidaX, salidaY, fantasma.getX(), fantasma.getY(), lab)>m){
+		do
+		{
+			aux->mover(mov);
+			cout<<"Movimiento: "<<mov<<" | "<<aux->getValor(salidaX, salidaY, fantasma.getX(), fantasma.getY(), lab)<<endl;
+			mov ++;
+			pared= aux->getPared(aux->getX(),aux->getY(),lab);
+			aux->setX(getX());
+			aux->setY(getY());
+			if (pared==true){
+				mov++;
+			}
 		}
-	}
-	while((aux->getValor(salidaX, salidaY, fantAux->getX(), fantAux->getY(), lab)>m) && 
-		mov<5 && m > 0);
-	if(mov>4 || m == 0){
-		cout<<"No se ha encontrado solucion"<<endl;
-		fin = false;
-	}
-	else{
-		mover(mov);
+		while((aux->getValor(salidaX, salidaY, fantasma.getX(), fantasma.getY(), lab)>m) && 
+			mov<5 && m > 0);
+		if(mov>4 || m == 0){
+			cout<<"No se ha encontrado solucion"<<endl;
+			fin = false;
+		}
+		else{
+			mover(mov);
+		}
 	}
 	else
 	{
 		cout<<"No se ha encontrado solucion"<<endl;
 		fin = false;
 	}
-	}
 
-	delete fantAux;
 	cout<<"Movimiento"<<endl;
 	cout<<"mov:"<<mov<<"  Fila:"<<y<<"  Col:"<<x<<endl;
 	return fin;
 }
 
-bool PacmanPersonaje::EscaladaMaxPendiente(char lab[10][10], int salidaX, int salidaY, int fantX, int fantY)
+bool PacmanPersonaje::EscaladaMaxPendiente(char lab[10][10], int salidaX, int salidaY, Fantasma fantasma)
 {
-	double hPr = getValor(salidaX, salidaY, fantX, fantY, lab), hPrAux = 0;
+	double hPr = getValor(salidaX, salidaY, fantasma.getX(), fantasma.getY(), lab), hPrAux = 0;
 
 	bool pared, mejor = false;
 
 	int movMejor = 0;
 
-	Fantasma *auxFant = new Fantasma(fantX, fantY);
-	auxFant->mover(lab);
+	fantasma.mover(lab);
 
 	for(int i = 1; i < 5; i++)
 	{	
@@ -144,9 +188,9 @@ bool PacmanPersonaje::EscaladaMaxPendiente(char lab[10][10], int salidaX, int sa
 		if(!pared){
 			auxPac->mover(i);
 
-			hPrAux = auxPac->getValor(salidaX, salidaY, auxFant->getX(), auxFant->getY(), lab);
+			hPrAux = auxPac->getValor(salidaX, salidaY, fantasma.getX(), fantasma.getY(), lab);
 
-			if(hPrAux > hPr && hPrAux != 0)
+			if(hPrAux < hPr && hPrAux != 0)
 			{
 				movMejor = i;
 				mejor = true;
@@ -155,8 +199,6 @@ bool PacmanPersonaje::EscaladaMaxPendiente(char lab[10][10], int salidaX, int sa
 		}
 		delete auxPac;
 	}
-
-	delete auxFant;
 
 	mover(movMejor);
 
@@ -181,7 +223,8 @@ double PacmanPersonaje::getValor(int salidaX, int salidaY, int fantX, int fantY,
 		}
 	}*/
 
-	return (distFantasma*100*0.1/(distSalida*100*2/*+numMuros*100*0.1*/));
+	//return (distFantasma*100*0.1/(pow(distSalida*100, 2)/*+numMuros*100*0.1*/));
+	return distSalida*2 * distFantasma*0.2;
 }
 
 bool PacmanPersonaje:: getPared(int x,int y,char lab[10][10])
